@@ -6,22 +6,64 @@ import re
 # =======================
 knowledge_base = {
     "flu": {
-        "symptoms": ["fever", "cough", "sore throat", "body ache"],
+        "symptoms": ["fever", "cough", "sore throat", "body ache", "fatigue"],
         "prevention": "Get vaccinated annually, wash hands regularly, and avoid close contact with sick people.",
-        "treatment": "Rest, drink fluids, and take paracetamol or ibuprofen. Seek medical help if symptoms persist.",
+        "treatment": "Rest, stay hydrated, and take paracetamol or ibuprofen. Seek medical help if symptoms worsen.",
         "doctor": {"name": "Dr. A. Mehta", "specialization": "General Physician", "education": "MBBS, MD (Internal Medicine)"}
     },
     "covid": {
-        "symptoms": ["fever", "cough", "shortness of breath", "loss of taste", "loss of smell"],
-        "prevention": "Wear a mask, maintain social distancing, and get vaccinated.",
-        "treatment": "Rest, hydration, and paracetamol. Isolate yourself and consult a doctor if breathing issues develop.",
+        "symptoms": ["fever", "cough", "shortness of breath", "loss of taste", "loss of smell", "fatigue"],
+        "prevention": "Wear a mask, maintain social distance, and get vaccinated.",
+        "treatment": "Rest, hydrate, and isolate yourself. Seek medical attention if breathing difficulties develop.",
         "doctor": {"name": "Dr. R. Patel", "specialization": "Pulmonologist", "education": "MBBS, MD (Pulmonary Medicine)"}
     },
     "dengue": {
-        "symptoms": ["fever", "joint pain", "headache", "rash", "body ache"],
-        "prevention": "Avoid mosquito bites, use repellents, and remove stagnant water around your house.",
+        "symptoms": ["fever", "joint pain", "headache", "rash", "body ache", "nausea"],
+        "prevention": "Avoid mosquito bites, use repellents, and remove stagnant water.",
         "treatment": "Drink plenty of fluids, rest, and take paracetamol (avoid aspirin).",
         "doctor": {"name": "Dr. N. Sharma", "specialization": "Infectious Disease Specialist", "education": "MBBS, MD (Infectious Diseases)"}
+    },
+    "malaria": {
+        "symptoms": ["fever", "chills", "sweating", "headache", "nausea", "vomiting"],
+        "prevention": "Use mosquito nets, insect repellents, and avoid stagnant water.",
+        "treatment": "Antimalarial medications as prescribed by a doctor. Rest and hydration.",
+        "doctor": {"name": "Dr. S. Khanna", "specialization": "Tropical Medicine Expert", "education": "MBBS, MD (Tropical Medicine)"}
+    },
+    "typhoid": {
+        "symptoms": ["fever", "headache", "abdominal pain", "fatigue", "constipation", "rash"],
+        "prevention": "Drink clean water, maintain hygiene, and get vaccinated for typhoid.",
+        "treatment": "Antibiotics prescribed by a doctor. Drink fluids and rest.",
+        "doctor": {"name": "Dr. M. Verma", "specialization": "Gastroenterologist", "education": "MBBS, MD (Gastroenterology)"}
+    },
+    "common cold": {
+        "symptoms": ["runny nose", "sneezing", "sore throat", "cough", "mild fever"],
+        "prevention": "Wash hands often and avoid close contact with infected people.",
+        "treatment": "Rest, drink warm fluids, and use over-the-counter cold medicines.",
+        "doctor": {"name": "Dr. L. Rao", "specialization": "General Practitioner", "education": "MBBS, MD (Family Medicine)"}
+    },
+    "chickenpox": {
+        "symptoms": ["rash", "itching", "fever", "fatigue", "loss of appetite"],
+        "prevention": "Get vaccinated and avoid contact with infected individuals.",
+        "treatment": "Rest, stay hydrated, and use calamine lotion to relieve itching.",
+        "doctor": {"name": "Dr. P. Iyer", "specialization": "Dermatologist", "education": "MBBS, MD (Dermatology)"}
+    },
+    "asthma": {
+        "symptoms": ["shortness of breath", "wheezing", "chest tightness", "cough"],
+        "prevention": "Avoid triggers like dust, smoke, and pollution. Follow your inhaler routine.",
+        "treatment": "Use prescribed inhalers and medications. Avoid known allergens.",
+        "doctor": {"name": "Dr. V. Gupta", "specialization": "Respiratory Specialist", "education": "MBBS, MD (Respiratory Medicine)"}
+    },
+    "tuberculosis": {
+        "symptoms": ["persistent cough", "chest pain", "weight loss", "night sweats", "fatigue"],
+        "prevention": "Get the BCG vaccine and ensure good ventilation in living areas.",
+        "treatment": "Long-term antibiotic treatment under medical supervision.",
+        "doctor": {"name": "Dr. T. Roy", "specialization": "Pulmonologist", "education": "MBBS, MD (Chest Medicine)"}
+    },
+    "migraine": {
+        "symptoms": ["headache", "nausea", "vomiting", "sensitivity to light", "sensitivity to sound"],
+        "prevention": "Manage stress, get enough sleep, and avoid known triggers like caffeine or loud noise.",
+        "treatment": "Take prescribed migraine medication, rest in a dark room, and stay hydrated.",
+        "doctor": {"name": "Dr. R. Nair", "specialization": "Neurologist", "education": "MBBS, DM (Neurology)"}
     }
 }
 
