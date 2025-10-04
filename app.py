@@ -29,7 +29,7 @@ if st.button("Send"):
         st.session_state.messages.append(("user", user_input))
         response = chatbot_response(user_input)
         st.session_state.messages.append(("bot", response))
-        st.experimental_rerun()
+        st.rerun()
 
 # Reset button
 if st.button("Reset Chat"):
