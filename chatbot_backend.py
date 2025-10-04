@@ -1,110 +1,88 @@
 import random
+import re
 
 # =======================
 # KNOWLEDGE BASE
 # =======================
-disease_data = {
+knowledge_base = {
     "flu": {
-        "symptoms": {"fever", "cough", "sore throat", "body ache"},
-        "medicine": "Paracetamol for fever, steam inhalation, and plenty of rest.",
-        "therapy": "Drink fluids, rest well, and avoid cold exposure.",
+        "symptoms": ["fever", "cough", "sore throat", "body ache"],
+        "prevention": "Get vaccinated annually, wash hands regularly, and avoid close contact with sick people.",
+        "treatment": "Rest, drink fluids, and take paracetamol or ibuprofen. Seek medical help if symptoms persist.",
         "doctor": {"name": "Dr. A. Mehta", "specialization": "General Physician", "education": "MBBS, MD (Internal Medicine)"}
     },
     "covid": {
-        "symptoms": {"fever", "cough", "shortness of breath", "loss of taste", "loss of smell"},
-        "medicine": "Paracetamol for fever, multivitamins, and hydration. Consult a doctor if severe.",
-        "therapy": "Isolate and monitor oxygen levels regularly.",
-        "doctor": {"name": "Dr. R. Sharma", "specialization": "Pulmonologist", "education": "MBBS, MD (Pulmonary Medicine)"}
+        "symptoms": ["fever", "cough", "shortness of breath", "loss of taste", "loss of smell"],
+        "prevention": "Wear a mask, maintain social distancing, and get vaccinated.",
+        "treatment": "Rest, hydration, and paracetamol. Isolate yourself and consult a doctor if breathing issues develop.",
+        "doctor": {"name": "Dr. R. Patel", "specialization": "Pulmonologist", "education": "MBBS, MD (Pulmonary Medicine)"}
     },
     "dengue": {
-        "symptoms": {"high fever", "joint pain", "rash", "headache"},
-        "medicine": "Paracetamol only (avoid ibuprofen). Stay hydrated.",
-        "therapy": "Drink ORS, rest, and monitor platelet count.",
-        "doctor": {"name": "Dr. K. Singh", "specialization": "Infectious Disease Specialist", "education": "MBBS, MD (Infectious Diseases)"}
-    },
-    "malaria": {
-        "symptoms": {"fever", "chills", "sweating", "headache"},
-        "medicine": "Antimalarial drugs such as chloroquine or artemisinin (as prescribed).",
-        "therapy": "Rest and drink fluids.",
-        "doctor": {"name": "Dr. T. Verma", "specialization": "General Physician", "education": "MBBS"}
-    },
-    "typhoid": {
-        "symptoms": {"fever", "weakness", "abdominal pain", "headache"},
-        "medicine": "Antibiotics like azithromycin or ceftriaxone (as prescribed).",
-        "therapy": "Eat soft food and stay hydrated.",
-        "doctor": {"name": "Dr. N. Rao", "specialization": "Gastroenterologist", "education": "MBBS, MD (Gastroenterology)"}
+        "symptoms": ["fever", "joint pain", "headache", "rash", "body ache"],
+        "prevention": "Avoid mosquito bites, use repellents, and remove stagnant water around your house.",
+        "treatment": "Drink plenty of fluids, rest, and take paracetamol (avoid aspirin).",
+        "doctor": {"name": "Dr. N. Sharma", "specialization": "Infectious Disease Specialist", "education": "MBBS, MD (Infectious Diseases)"}
     }
 }
 
 # =======================
-# GLOBAL STATE
+# GREETINGS & FALLBACKS
 # =======================
-user_symptoms = set()
+greetings = ["hello", "hi", "hey", "namaste", "hola"]
+
+greet_responses = [
+    "Hello! How can I help with your health query?",
+    "Hi there! Tell me your symptoms, and I’ll suggest possible diseases.",
+    "Namaste! Describe your symptoms — I’ll help you find possible causes."
+]
+
+fallbacks = [
+    "Sorry, I couldn't identify the disease. Try mentioning common symptoms like fever, cough, or body ache.",
+    "Hmm, I didn’t understand that. Please describe what symptoms you have.",
+    "I can help with symptoms like fever, cough, rash, or headache. What are you feeling?"
+]
 
 # =======================
-# CHATBOT RESPONSE LOGIC
+# CHATBOT LOGIC
 # =======================
 def chatbot_response(user_input):
-    global user_symptoms
     user_input = user_input.lower().strip()
 
-    # Reset conversation
-    if user_input in ["reset", "start over", "clear"]:
-        user_symptoms.clear()
-        return "🔄 Conversation reset. Please enter your first symptom."
-
     # Greeting
-    if any(greet in user_input for greet in ["hello", "hi", "hey", "namaste"]):
-        return "👋 Hello! Please describe one symptom you're experiencing."
+    if any(word in user_input for word in greetings):
+        return random.choice(greet_responses)
 
-    # Extract symptom (simple version)
-    for word in user_input.split():
-        for disease, info in disease_data.items():
-            if word in info["symptoms"]:
-                user_symptoms.add(word)
+    # Find matching diseases by symptoms
+    matched_diseases = []
+    for disease, info in knowledge_base.items():
+        for symptom in info["symptoms"]:
+            if symptom in user_input:
+                matched_diseases.append(disease)
+                break
 
-    # Ask for next symptom
-    if len(user_symptoms) < 2:
-        if not user_symptoms:
-            return "Please enter your first symptom (e.g., fever, cough, headache)."
+    if matched_diseases:
+        # If only one disease matches
+        if len(matched_diseases) == 1:
+            disease = matched_diseases[0]
+            info = knowledge_base[disease]
+            response = (
+                f"🩺 It seems you may have **{disease.title()}**.\n\n"
+                f"**Symptoms:** {', '.join(info['symptoms'])}\n"
+                f"**Prevention:** {info['prevention']}\n"
+                f"**Treatment:** {info['treatment']}\n\n"
+                f"👨‍⚕️ Recommended Doctor: {info['doctor']['name']}\n"
+                f"**Specialization:** {info['doctor']['specialization']}\n"
+                f"**Education:** {info['doctor']['education']}"
+            )
+            return response
+
+        # If multiple diseases match
         else:
-            return "Got it. Please enter another symptom to narrow down the diagnosis."
+            return f"Based on your symptoms, possible diseases could be: {', '.join(matched_diseases)}. Please describe another symptom to narrow it down."
 
-    # Match diseases based on entered symptoms
-    possible_diseases = []
-    for disease, info in disease_data.items():
-        match_count = len(user_symptoms.intersection(info["symptoms"]))
-        if match_count >= 2:
-            possible_diseases.append((disease, match_count))
+    # Vaccine info
+    if re.search(r'vaccine|vaccination', user_input):
+        return "Vaccination schedules vary by age and disease. Visit your nearest health center for the latest schedule."
 
-    if not possible_diseases:
-        return f"I couldn't find a clear match for your symptoms ({', '.join(user_symptoms)}). Please try again or type 'reset' to start over."
-
-    # Sort by best match
-    possible_diseases.sort(key=lambda x: x[1], reverse=True)
-    best_match = possible_diseases[0][0]
-    info = disease_data[best_match]
-
-    # Clear after diagnosis
-    user_symptoms.clear()
-
-    return (
-        f"🩺 Based on your symptoms, you might have **{best_match.title()}**.\n\n"
-        f"💊 **Recommended Medicine:** {info['medicine']}\n"
-        f"💆 **Therapy:** {info['therapy']}\n\n"
-        f"👨‍⚕️ **Suggested Doctor:** {info['doctor']['name']} — {info['doctor']['specialization']}\n"
-        f"🎓 **Education:** {info['doctor']['education']}\n\n"
-        f"Type 'reset' to start again."
-    )
-
-# =======================
-# TEST CHATBOT (optional)
-# =======================
-if __name__ == "__main__":
-    print("AI Health Chatbot (Type 'exit' to quit)\n")
-    while True:
-        user_input = input("You: ")
-        if user_input.lower() in ["exit", "quit", "bye"]:
-            print("Chatbot: Take care! Goodbye!")
-            break
-        print(f"Chatbot: {chatbot_response(user_input)}\n")
+    # Fallback
+    return random.choice(fallbacks)
